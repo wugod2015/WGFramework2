@@ -17,7 +17,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnCloseListener;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
@@ -131,6 +133,8 @@ public class MoviesActivity extends BaseActivity implements OnRefreshListener,
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		movies = new ArrayList<>();
 		adapter = new MoviesAdapter(this, movies);
+		View headView = new View(mContext);
+		adapter.setHeadView(headView, 84);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setOnScrollListener(new HidingScrollListener() {
 
@@ -153,9 +157,9 @@ public class MoviesActivity extends BaseActivity implements OnRefreshListener,
 		adapter.setOnItemClickListener(new MoviesAdapter.OnRecyclerViewItemClickListener() {
 
 			@Override
-			public void onItemClick(View view, Movie item) {
+			public void onItemClick(View view, Object item) {
 				// TODO Auto-generated method stub
-				ActivityUtils.startMovieActivity(mContext, item);
+				ActivityUtils.startMovieActivity(mContext, (Movie) item);
 			}
 		});
 

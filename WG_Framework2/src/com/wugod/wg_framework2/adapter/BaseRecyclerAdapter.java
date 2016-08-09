@@ -6,11 +6,19 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wugod.wg_framework2.utils.LogUtils;
 
-public abstract class BaseRecyclerAdapter extends Adapter<ViewHolder> {
+/**
+ * baseAdapter with head
+ * 
+ * @author hanhuizhong
+ * @date 2016-8-9
+ */
+public abstract class BaseRecyclerAdapter extends Adapter<ViewHolder> implements
+		OnClickListener {
 	final static int VIEW_TYPE_HEAD = 1;
 	final static String TAG = "BaseRecyclerAdapter";
 
@@ -18,6 +26,7 @@ public abstract class BaseRecyclerAdapter extends Adapter<ViewHolder> {
 	public List<?> list;
 
 	public View headView;
+	public int headHeight;
 
 	public View getHeadView() {
 		return headView;
@@ -25,6 +34,11 @@ public abstract class BaseRecyclerAdapter extends Adapter<ViewHolder> {
 
 	public void setHeadView(View headView) {
 		this.headView = headView;
+	}
+
+	public void setHeadView(View headView, int headHeight) {
+		this.headView = headView;
+		this.headHeight = headHeight;
 	}
 
 	public BaseRecyclerAdapter(Context context, List<?> list) {
@@ -53,9 +67,15 @@ public abstract class BaseRecyclerAdapter extends Adapter<ViewHolder> {
 	public void onBindViewHolder(ViewHolder viewHolder, int position) {
 		// TODO Auto-generated method stub
 
-		if (headView != null && position == 0)
+		viewHolder.itemView.setTag(list.get(position));
+		viewHolder.itemView.setOnClickListener(this);
+		if (headView != null && position == 0) {
+
+			if (headHeight > 0) {
+				viewHolder.itemView.setMinimumHeight(headHeight);
+			}
 			onBindViewHolderHead(viewHolder, position);
-		else
+		} else
 			onBindViewHolderItem(viewHolder, position);
 	}
 
@@ -83,5 +103,24 @@ public abstract class BaseRecyclerAdapter extends Adapter<ViewHolder> {
 		if (headView != null && position == 0)
 			return VIEW_TYPE_HEAD;
 		return super.getItemViewType(position);
+	}
+
+	public static interface OnRecyclerViewItemClickListener {
+		void onItemClick(View view, Object item);
+	}
+
+	private OnRecyclerViewItemClickListener mOnItemClickListener = null;
+
+	public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+		this.mOnItemClickListener = listener;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (mOnItemClickListener != null) {
+			// 注意这里使用getTag方法获取数据
+			mOnItemClickListener.onItemClick(v, v.getTag());
+		}
 	}
 }

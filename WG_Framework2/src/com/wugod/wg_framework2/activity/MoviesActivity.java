@@ -39,6 +39,7 @@ import com.wugod.wg_framework2.db.MovieDao.Properties;
 import com.wugod.wg_framework2.listener.HidingScrollListener;
 import com.wugod.wg_framework2.server.ServerApi;
 import com.wugod.wg_framework2.subscriber.DataResultSubscriber;
+import com.wugod.wg_framework2.utils.DisplayUtils;
 import com.wugod.wg_framework2.utils.LogUtils;
 
 @SuppressLint("NewApi")
@@ -134,7 +135,7 @@ public class MoviesActivity extends BaseActivity implements OnRefreshListener,
 		movies = new ArrayList<>();
 		adapter = new MoviesAdapter(this, movies);
 		View headView = new View(mContext);
-		adapter.setHeadView(headView, 84);
+		adapter.setHeadView(headView);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setOnScrollListener(new HidingScrollListener() {
 
@@ -164,6 +165,15 @@ public class MoviesActivity extends BaseActivity implements OnRefreshListener,
 		});
 
 		initSpinnerToToolbar();
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		// TODO Auto-generated method stub
+		super.onWindowFocusChanged(hasFocus);
+		ViewGroup.LayoutParams lp = adapter.getHeadView().getLayoutParams();
+		lp.height = mToolBar.getHeight();
+		adapter.getHeadView().setLayoutParams(lp);
 	}
 
 	private void initSpinnerToToolbar() {

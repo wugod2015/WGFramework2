@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
@@ -21,6 +22,7 @@ import com.wugod.wg_framework2.bean.BaseDataResult;
 import com.wugod.wg_framework2.bean.DataResult;
 import com.wugod.wg_framework2.bean.Movie;
 import com.wugod.wg_framework2.bean.MovieResult;
+import com.wugod.wg_framework2.bean.telematics;
 import com.wugod.wg_framework2.bean.WeatherResult;
 
 public class ServerApi extends BaseApi {
@@ -30,7 +32,11 @@ public class ServerApi extends BaseApi {
 		Observable<DataResult<MovieResult<List<Movie>>>> getMoviesObservable(
 				@QueryMap Map<String, String> params);
 
-		//@Headers("Cache-Control: public, max-age=30")
+		@GET("movie")
+		Observable<telematics> getMoviesObservable_XML(
+				@QueryMap Map<String, String> params);
+
+		// @Headers("Cache-Control: public, max-age=30")
 		@GET("weather")
 		Observable<DataResult<WeatherResult>> getWeathersObservable(
 				@QueryMap Map<String, String> params);
@@ -39,27 +45,58 @@ public class ServerApi extends BaseApi {
 		@POST("接口")
 		Observable<BaseDataResult> saveFiles(
 				@PartMap Map<String, RequestBody> params);
+		// 请求 xml 格式
+		// @Headers({ "Content-Type: text/xml", "Accept-Charset: utf-8" })
+		// @POST("cimservice_api/service")
+		// Observable<String> getXML(@Body String xml );
 	}
 
 	protected final static BaseService service = getRetrofit().create(
 			BaseService.class);
 
+	/*
+	 * 请求 xml 格式 public static Observable<String> getXML() { // TODO
+	 * Auto-generated method stub String xml ="xml"; return service.getXML(xml);
+	 * }
+	 */
 	public static Observable<DataResult<MovieResult<List<Movie>>>> getMovies(
 			String location) {
 		// TODO Auto-generated method stub
 
+		return service.getMoviesObservable(getMovies_params(location, true));
+	}
+
+	public static Observable<telematics> getMovies_XML(
+			String location) {
+		// TODO Auto-generated method stub
+
+		return service.getMoviesObservable_XML(getMovies_params(location, false));
+	}
+
+	/**
+	 * @author hanhuizhong
+	 * @date 2016-8-10
+	 * @param location
+	 * @param isJSON
+	 *            默认xml
+	 * @return
+	 */
+	private static Map<String, String> getMovies_params(String location,
+			boolean isJSON) {
+		// TODO Auto-generated method stub
 		Map<String, String> params = new HashMap<>();
 		params.put("qt", "hot_movie");
 		if (TextUtils.isEmpty(location))
 			params.put("location", "石家庄");
 		else
 			params.put("location", location);
-		params.put("output", "json");
+		if (isJSON)
+			params.put("output", "json");
 		params.put("ak", "ZqSI8jEqG2HHZjtp246dUf5XPC4phR53");
 		params.put(
 				"mcode",
 				"DF:27:51:65:09:8B:23:76:7B:64:52:96:E9:08:76:10:49:64:21:BF;com.wugod.forestofmemory");
-		return service.getMoviesObservable(params);
+		return params;
 	}
 
 	public static Observable<DataResult<WeatherResult>> getWeathers(
@@ -78,6 +115,7 @@ public class ServerApi extends BaseApi {
 				"DF:27:51:65:09:8B:23:76:7B:64:52:96:E9:08:76:10:49:64:21:BF;com.wugod.forestofmemory");
 		return service.getWeathersObservable(params);
 	}
+
 	public static Observable<BaseDataResult> saveFiles(Activity activity,
 			Map<String, String> params, List<File> files) {
 		// TODO Auto-generated method stub

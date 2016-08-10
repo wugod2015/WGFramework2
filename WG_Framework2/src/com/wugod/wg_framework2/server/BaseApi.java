@@ -9,6 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,7 +40,8 @@ public abstract class BaseApi {
 
 			mRetrofit = new Retrofit.Builder().baseUrl(Urls.SERVER_URL)
 					.addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-					.addConverterFactory(GsonConverterFactory.create(gson))
+					//.addConverterFactory(GsonConverterFactory.create(gson))
+					.addConverterFactory(SimpleXmlConverterFactory.create())
 					.client(mOkHttpClient).build();
 		}
 		return mRetrofit;

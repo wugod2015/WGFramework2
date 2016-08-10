@@ -1,8 +1,12 @@
 package com.wugod.wg_framework2.activity;
 
 import java.io.File;
+import java.util.List;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,7 +31,12 @@ import android.widget.TextView;
 
 import com.wugod.wg_framework2.ActivityUtils;
 import com.wugod.wg_framework2.R;
+import com.wugod.wg_framework2.bean.Movie;
+import com.wugod.wg_framework2.bean.MovieResult;
+import com.wugod.wg_framework2.bean.telematics;
 import com.wugod.wg_framework2.fragment.MainDrawerMenuFragment;
+import com.wugod.wg_framework2.server.ServerApi;
+import com.wugod.wg_framework2.subscriber.DataResultSubscriber;
 import com.wugod.wg_framework2.utils.DisplayUtils;
 import com.wugod.wg_framework2.utils.DownLoadUtils;
 import com.wugod.wg_framework2.utils.FileUtils;
@@ -52,7 +61,32 @@ public class MainActivity extends LockableActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main_drawer);
+		ServerApi
+		.getMovies_XML("石家庄")
+		.subscribeOn(Schedulers.io())
+		.observeOn(AndroidSchedulers.mainThread())
+		.subscribe(new Subscriber<telematics>() {
 
+			@Override
+			public void onCompleted() {
+				// TODO Auto-generated method stub
+
+				LogUtils.d(TAG, "onCompleted");	
+			}
+
+			@Override
+			public void onError(Throwable arg0) {
+				// TODO Auto-generated method stub
+
+				LogUtils.d(TAG, "onError");	
+			}
+
+			@Override
+			public void onNext(telematics arg0) {
+				// TODO Auto-generated method stub
+			LogUtils.d(TAG, "onNext");	
+			}
+		});
 	}
 
 	@Override

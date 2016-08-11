@@ -26,27 +26,29 @@ public abstract class BaseRecyclerAdapter extends Adapter<ViewHolder> implements
 	public List<?> list;
 
 	public View headView;
-	public int headHeight;
 
 	public View getHeadView() {
 		return headView;
 	}
 
-	public void setHeadView(View headView) {
-		this.headView = headView;
-	}
-
-	public void setHeadView(View headView, int headHeight) {
-		this.headView = headView;
-		this.headHeight = headHeight;
-	}
-
 	public BaseRecyclerAdapter(Context context, List<?> list) {
 		// TODO Auto-generated constructor stub
 
-		LogUtils.d(TAG, "BaseRecyclerAdapter:");
+		LogUtils.d(TAG, "BaseRecyclerAdapter(Context context, List<?> list)");
 		this.context = context;
 		this.list = list;
+		if (headView != null)
+			this.list.add(0, null);
+	}
+
+	public BaseRecyclerAdapter(Context context, List<?> list, View headView) {
+		// TODO Auto-generated constructor stub
+
+		LogUtils.d(TAG,
+				"BaseRecyclerAdapter(Context context, List<?> list,View headView)");
+		this.context = context;
+		this.list = list;
+		this.headView = headView;
 		if (headView != null)
 			this.list.add(0, null);
 	}
@@ -71,9 +73,6 @@ public abstract class BaseRecyclerAdapter extends Adapter<ViewHolder> implements
 		viewHolder.itemView.setOnClickListener(this);
 		if (headView != null && position == 0) {
 
-			if (headHeight > 0) {
-				viewHolder.itemView.setMinimumHeight(headHeight);
-			}
 			onBindViewHolderHead(viewHolder, position);
 		} else
 			onBindViewHolderItem(viewHolder, position);

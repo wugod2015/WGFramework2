@@ -16,8 +16,15 @@ import com.wugod.wg_framework2.bean.Movie;
 
 public class MoviesAdapter extends BaseRecyclerAdapter{
 
+	
+ 
 	public MoviesAdapter(Context context, List<?> list) {
 		super(context, list);
+		// TODO Auto-generated constructor stub
+	}
+
+	public MoviesAdapter(Context context, List<?> list, View headView) {
+		super(context, list, headView);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -6,7 +6,6 @@ import java.util.List;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import android.annotation.SuppressLint;
-import android.app.ActionBar.LayoutParams;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,7 +16,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnCloseListener;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -33,13 +31,14 @@ import com.wugod.wg_framework2.R;
 import com.wugod.wg_framework2.adapter.MoviesAdapter;
 import com.wugod.wg_framework2.bean.Movie;
 import com.wugod.wg_framework2.bean.MovieResult;
+import com.wugod.wg_framework2.bean.xml.MovieResult_XML;
 import com.wugod.wg_framework2.db.DBHelper;
 import com.wugod.wg_framework2.db.MovieDao;
 import com.wugod.wg_framework2.db.MovieDao.Properties;
 import com.wugod.wg_framework2.listener.HidingScrollListener;
 import com.wugod.wg_framework2.server.ServerApi;
 import com.wugod.wg_framework2.subscriber.DataResultSubscriber;
-import com.wugod.wg_framework2.utils.DisplayUtils;
+import com.wugod.wg_framework2.subscriber.DataResultSubscriber_XML;
 import com.wugod.wg_framework2.utils.LogUtils;
 
 @SuppressLint("NewApi")
@@ -74,10 +73,46 @@ public class MoviesActivity extends BaseActivity implements OnRefreshListener,
 
 		swipeRefreshLayout.setRefreshing(true);
 
-		movies.clear();
-		movies.addAll(movieDao.queryBuilder().list());
-		adapter.notifyDataSetChanged();
+		/*
+		 * movies.clear(); movies.addAll(movieDao.queryBuilder().list());
+		 * adapter.notifyDataSetChanged();
+		 */
+		getMoviesByJson(location);
+		// getMoviesByXml(location);
 
+	}
+
+	private void getMoviesByXml(String location) {
+		// TODO Auto-generated method stub
+		ServerApi.getMovies_XML(location).subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new DataResultSubscriber_XML() {
+
+					@Override
+					public void onResult(String msg, MovieResult_XML result) {
+						// TODO Auto-generated method stub
+						swipeRefreshLayout.setRefreshing(false);
+						movies.clear();
+						movies.addAll(result.movie);
+						adapter.notifyDataSetChanged();
+
+						movieDao.deleteAll();
+						movieDao.insertOrReplaceInTx(movies);
+
+					}
+
+					@Override
+					protected void onErrorResult(String errorStr) {
+						// TODO Auto-generated method stub
+						super.onErrorResult(errorStr);
+						swipeRefreshLayout.setRefreshing(false);
+					}
+
+				});
+	}
+
+	private void getMoviesByJson(String location) {
+		// TODO Auto-generated method stub
 		ServerApi
 				.getMovies(location)
 				.subscribeOn(Schedulers.io())
@@ -133,9 +168,8 @@ public class MoviesActivity extends BaseActivity implements OnRefreshListener,
 
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		movies = new ArrayList<>();
-		adapter = new MoviesAdapter(this, movies);
 		View headView = new View(mContext);
-		adapter.setHeadView(headView);
+		adapter = new MoviesAdapter(this, movies, headView);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setOnScrollListener(new HidingScrollListener() {
 
@@ -172,8 +206,10 @@ public class MoviesActivity extends BaseActivity implements OnRefreshListener,
 		// TODO Auto-generated method stub
 		super.onWindowFocusChanged(hasFocus);
 		ViewGroup.LayoutParams lp = adapter.getHeadView().getLayoutParams();
-		lp.height = mToolBar.getHeight();
-		adapter.getHeadView().setLayoutParams(lp);
+		if (lp != null) {
+			lp.height = mToolBar.getHeight();
+			adapter.getHeadView().setLayoutParams(lp);
+		}
 	}
 
 	private void initSpinnerToToolbar() {

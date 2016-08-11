@@ -22,8 +22,9 @@ import com.wugod.wg_framework2.bean.BaseDataResult;
 import com.wugod.wg_framework2.bean.DataResult;
 import com.wugod.wg_framework2.bean.Movie;
 import com.wugod.wg_framework2.bean.MovieResult;
-import com.wugod.wg_framework2.bean.telematics;
 import com.wugod.wg_framework2.bean.WeatherResult;
+import com.wugod.wg_framework2.bean.xml.DataResult_XML;
+import com.wugod.wg_framework2.bean.xml.MovieResult_XML;
 
 public class ServerApi extends BaseApi {
 
@@ -33,7 +34,7 @@ public class ServerApi extends BaseApi {
 				@QueryMap Map<String, String> params);
 
 		@GET("movie")
-		Observable<telematics> getMoviesObservable_XML(
+		Observable<DataResult_XML> getMoviesObservable_XML(
 				@QueryMap Map<String, String> params);
 
 		// @Headers("Cache-Control: public, max-age=30")
@@ -53,6 +54,8 @@ public class ServerApi extends BaseApi {
 
 	protected final static BaseService service = getRetrofit().create(
 			BaseService.class);
+	protected final static BaseService service_XML = getRetrofit_XML().create(
+			BaseService.class);
 
 	/*
 	 * 请求 xml 格式 public static Observable<String> getXML() { // TODO
@@ -66,11 +69,11 @@ public class ServerApi extends BaseApi {
 		return service.getMoviesObservable(getMovies_params(location, true));
 	}
 
-	public static Observable<telematics> getMovies_XML(
+	public static Observable<DataResult_XML> getMovies_XML(
 			String location) {
 		// TODO Auto-generated method stub
 
-		return service.getMoviesObservable_XML(getMovies_params(location, false));
+		return service_XML.getMoviesObservable_XML(getMovies_params(location, false));
 	}
 
 	/**

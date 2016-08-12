@@ -171,7 +171,7 @@ public class PinLockView extends RecyclerView {
     }
 
     private void initView() {
-        setLayoutManager(new GridLayoutManager(getContext(), 3));
+        setLayoutManager(new PinGridLayoutManager(getContext(), 3));
 
         mAdapter = new PinLockAdapter(getContext());
         mAdapter.setOnItemClickListener(mOnNumberClickListener);

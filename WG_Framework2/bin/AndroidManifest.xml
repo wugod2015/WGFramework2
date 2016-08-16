@@ -79,10 +79,16 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         <activity
-            android:name="com.wugod.wg_framework2.activity.MovieActivity"
+            android:name=".activity.MovieActivity"
             android:label="@string/title_activity_movie"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
+        </activity>
+        <activity
+            android:name=".activity.PhotoWallActivity"
+            android:label="@string/title_activity_photo_wall" 
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide">
         </activity>
     </application>
 

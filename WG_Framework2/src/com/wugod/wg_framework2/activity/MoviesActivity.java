@@ -56,7 +56,7 @@ public class MoviesActivity extends BaseActivity implements OnRefreshListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView_BackToolbar(R.layout.activity_list_recycler_view);
+		setContentView_BackToolbar(R.layout.fragment_list_recycler_view);
 		movieDao = DBHelper.getDaoMaster(this).newSession().getMovieDao();
 		getMovies(null);
 		// RxBus.getDefault().post(new RxEvent(0, "movies", null));

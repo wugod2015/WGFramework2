@@ -41,7 +41,8 @@ public class MainDrawerMenuFragment extends BaseFragment implements
 
 		String[] titles = new String[] {
 				getString(R.string.title_activity_movies),
-				getString(R.string.title_activity_weathers) };
+				getString(R.string.title_activity_weathers) ,
+				getString(R.string.title_activity_photo_wall)};
 		listView = (ListView) view.findViewById(R.id.listView);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,
 				R.layout.item_main_drawer_menu_fragment, R.id.title, titles);
@@ -63,6 +64,11 @@ public class MainDrawerMenuFragment extends BaseFragment implements
 		case 1:
 
 			ActivityUtils.startWeathersActivity(mContext);
+			// RxBus.getDefault().post(new RxEvent(0, "RxBus", null));
+			break;
+		case 2:
+
+			ActivityUtils.startPhotoWallActivity(mContext);
 			// RxBus.getDefault().post(new RxEvent(0, "RxBus", null));
 			break;
 		default:

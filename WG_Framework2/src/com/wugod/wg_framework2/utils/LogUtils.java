@@ -52,7 +52,14 @@ public class LogUtils {
 		if (debug)
 			android.util.Log.v(tag, msg);
 	}
-
+	public static void w(String tag, String msg) {
+		// TODO Auto-generated method stub
+		if (msg == null) {
+			msg = "null";
+		}
+		if (debug)
+			android.util.Log.w(tag, msg);
+	}
 	public static boolean isLoggable(String arg0, int arg1) {
 		// TODO Auto-generated method stub
 		if (debug)

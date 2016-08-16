@@ -8,6 +8,7 @@ import com.wugod.wg_framework2.activity.LockActivity;
 import com.wugod.wg_framework2.activity.LoginActivity;
 import com.wugod.wg_framework2.activity.MovieActivity;
 import com.wugod.wg_framework2.activity.MoviesActivity;
+import com.wugod.wg_framework2.activity.PhotoWallActivity;
 import com.wugod.wg_framework2.activity.WeathersActivity;
 import com.wugod.wg_framework2.bean.Movie;
 import com.wugod.wg_framework2.utils.LogUtils;
@@ -54,5 +55,10 @@ public class ActivityUtils {
 		Intent intent = new Intent(context, WeathersActivity.class);
 		context.startActivity(intent);
 	}
+	public static void startPhotoWallActivity(Context context) {
+		LogUtils.d(TAG, "startPhotoWallActivity");
 
+		Intent intent = new Intent(context, PhotoWallActivity.class);
+		context.startActivity(intent);
+	}
 }

@@ -31,7 +31,7 @@ public class MoviesAdapter extends BaseRecyclerAdapter{
 	@Override
 	protected void onBindViewHolderItem(ViewHolder viewHolder, int position) {
 		// TODO Auto-generated method stub
-		ListViewHolder holder = (ListViewHolder) viewHolder;
+		MovieHolder holder = (MovieHolder) viewHolder;
 
 		Movie item = (Movie)list.get(position);
 		holder.movie_name.setText(item.getMovie_name());
@@ -49,11 +49,11 @@ public class MoviesAdapter extends BaseRecyclerAdapter{
 	@Override
 	protected ViewHolder onCreateViewHolderItem(ViewGroup parent, int viewType) {
 		// TODO Auto-generated method stub
-		ListViewHolder holder = new ListViewHolder(LayoutInflater.from(context)
+		MovieHolder holder = new MovieHolder(LayoutInflater.from(context)
 				.inflate(R.layout.item_movies, parent, false));
 		return holder;
 	}
-	public class ListViewHolder extends ViewHolder {
+	public class MovieHolder extends ViewHolder {
 
 		TextView movie_name;
 		TextView movie_release_date;
@@ -61,7 +61,7 @@ public class MoviesAdapter extends BaseRecyclerAdapter{
 		ImageView movie_picture;
 		ImageView is_new;
 
-		public ListViewHolder(View v) {
+		public MovieHolder(View v) {
 			super(v);
 			// TODO Auto-generated constructor stub
 			movie_name = (TextView) v.findViewById(R.id.movie_name);
